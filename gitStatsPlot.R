@@ -5,15 +5,19 @@ require(gridExtra)
 
 df <- read.csv(file = 'C:/Users/erdem/Documents/code/quantMinds2019/gitHubStats.csv')
 setDT(df)
- 
+
+colorMap <- data.frame(category=c("data manipulation","machinelearning", 
+                          "mathematics", "visualization"),
+               color = c("#FFCC99","#66FFFF", "#99FF66", "#FF9900"))
+df <- merge(df, colorMap)
 # remove background
 # remove yaxis 5901, done
 # remove ylabel done...
 # remove xlabel done
 # rotate xlabel by 90 degrees (if rotated axis shift to x not aligned)
-# columns with respect to type of the library, commits/forks/stars/watchers 
+# columns with respect to type of the library, commits/forks/stars/watchers (done)
 # color with respect to category
-# take care of python ones first, with an order, than commits
+# take care of python ones first, with an order, than commits done
 
 # python ones
 # 1,2,3,4
@@ -28,12 +32,12 @@ setDT(df)
 # creates Single plot
 createPlot <- function(row, ycolumn, color, xlab, ylim, leftmargin) {
   p1 <- ggplot(row, aes_string(x = "repo", y = ycolumn, label = ycolumn)) +
-  geom_bar(stat = "identity") +
+  geom_bar(stat = "identity", fill=row$color) +
   # geom_text(size = 3, hjust = -10, nudge_x =  0 ) +
     geom_text(
       aes_string(x = "repo", y = ycolumn, label = ycolumn), 
-      hjust = -0.5, size = 2,
-      inherit.aes = TRUE
+      hjust = -0.5, size = 10,
+      inherit.aes = TRUE, color=row$color
     )  +
   coord_flip(ylim = c(0, ylim)) +
   labs(y='', x=xlab) + 
@@ -44,7 +48,10 @@ createPlot <- function(row, ycolumn, color, xlab, ylim, leftmargin) {
         panel.border = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        plot.margin=unit(c(0,0,-0.5,leftmargin), "cm"))   
+        plot.margin=unit(c(0,0,-0.5,leftmargin), "cm"),
+        panel.background = element_rect(fill = "white",
+                                        colour = "white",
+                                        size = 0.5, linetype = "solid"))   
   # +
   # annotate(geom = "text", x = 1, y = -1,
   #          label = "helpful annotation", color = "red",
@@ -66,7 +73,7 @@ createGlob <- function(df) {
   gs <- list()
   for(id in 1:dim(df)[1]) {
     row <- df[id,]
-    p1 <- createPlot(row, ycolumn = "commits", color = '',
+    p1 <- createPlot(row, ycolumn = "commits", color = row$color,
                      xlab = row$repo, ylim= 25000, leftmargin = 1)
     p2 <- createPlot(row, ycolumn = "forks", color = '',
                      xlab = '', ylim= 100000, leftmargin = -1)
@@ -92,9 +99,8 @@ layR <- matrix(seq(length(gsP)+1, length.out=length(gsR)), ncol = 4, byrow=TRUE)
 gs <- c(gsP, gsR)
 lay <- rowr::cbind.fill(layP, layR, fill=NA)
 
-grid.arrange(grobs=gsR, layout_matrix = layR)
-grid.arrange(grobs=gsP, layout_matrix = layP)
-# grid.arrange(grobs=gs[1:52], layout_matrix = layP)
+# grid.arrange(grobs=gsR, layout_matrix = layR)
+# grid.arrange(grobs=gsP, layout_matrix = layP)
 grid.arrange(grobs=gs, layout_matrix = data.matrix(lay))
 
 # 
