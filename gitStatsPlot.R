@@ -25,7 +25,7 @@ setDT(df)
 # 5, 6, 7, 8, NA, NA, NA, NA
 
 
-
+# creates Single plot
 createPlot <- function(row, ycolumn, color, xlab, ylim, leftmargin) {
   p1 <- ggplot(row, aes_string(x = "repo", y = ycolumn, label = ycolumn)) +
   geom_bar(stat = "identity") +
@@ -51,6 +51,7 @@ createPlot <- function(row, ycolumn, color, xlab, ylim, leftmargin) {
   #            angle = 0)
   return(p1)
 }
+# test of single plot
 createPlot(row, ycolumn = "commits", color = '',
            xlab = row$repo, ylim= 20000, leftmargin = 1)
 
@@ -60,10 +61,9 @@ addToList <- function(gs, p){
   return(gs)
 }
 
-
-
-
-createGlob <- function(df, gs) {
+# go through data and create a list of plots => glob
+createGlob <- function(df) {
+  gs <- list()
   for(id in 1:dim(df)[1]) {
     row <- df[id,]
     p1 <- createPlot(row, ycolumn = "commits", color = '',
@@ -82,22 +82,36 @@ createGlob <- function(df, gs) {
   return(gs)
 }
 
-gsP <- list()
+
 gsP <- createGlob(df[type=="python"][order(category,-commits)])  
-layP <- matrix(1:length(gsP), ncol =4, byrow=TRUE)
+layP <- matrix(1:length(gsP), ncol = 4, byrow=TRUE)
 
+gsR <- createGlob(df[type=="R"][order(category,-commits)])  
+layR <- matrix(seq(length(gsP)+1, length.out=length(gsR)), ncol = 4, byrow=TRUE)
 
-grid.arrange(grobs=gs, layout_matrix = lay)
+gs <- c(gsP, gsR)
+lay <- rowr::cbind.fill(layP, layR, fill=NA)
 
+grid.arrange(grobs=gsR, layout_matrix = layR)
+grid.arrange(grobs=gsP, layout_matrix = layP)
+# grid.arrange(grobs=gs[1:52], layout_matrix = layP)
+grid.arrange(grobs=gs, layout_matrix = data.matrix(lay))
 
-library(gridExtra)
-library(grid)
-library(ggplot2)
-library(lattice)
-gs <- lapply(1:9, function(ii) 
-  grobTree(rectGrob(gp=gpar(fill=ii, alpha=0.5)), textGrob(ii)))
-
-lay <- rbind(c(1,1,1,2,3),
-             c(1,1,1,4,5),
-             c(6,7,8,9,9))
-grid.arrange(grobs = gs, layout_matrix = lay)
+# 
+# library(gridExtra)
+# library(grid)
+# library(ggplot2)
+# library(lattice)
+# gs <- lapply(1:9, function(ii)
+#   grobTree(rectGrob(gp=gpar(fill=ii, alpha=0.5)), textGrob(ii)))
+# 
+# lay <- rbind(c(1,1,NA,2,3),
+#              c(1,1,NA,4,NA),
+#              c(6,7,8,9,NA))
+# grid.arrange(grobs = gs, layout_matrix = lay)
+# 
+# 
+# require(qpcR)
+# a <- matrix(rnorm(20), ncol = 4) # unequal size matrices
+# b <- matrix(rnorm(20), ncol = 5)
+# cbind.na(a, b) # works, in contrast to original cbind
