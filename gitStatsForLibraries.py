@@ -69,7 +69,7 @@ def getStarsForksWatchers(owner, repo):
 
 
 
-df = pd.read_csv(r'C:\Users\erdem\Documents\code\quantMinds2019\libraryList.csv')
+df = pd.read_csv(r'C:\Users\erdem\Documents\code\quantMinds2019\libraryList2.csv')
 #df.apply(lambda x: pd.Series( , axis= 1) 
 res = pd.DataFrame()
 for index, row in df.iterrows():
@@ -77,11 +77,15 @@ for index, row in df.iterrows():
      dict1 = {'commits':getCommitCount(row['owner'], row['repo'])}
      dict2 = getStarsForksWatchers(row['owner'], row['repo'])
      dict1.update(dict2)
-     dict1.update({'owner':row['owner'], 'repo':row['repo']})
+     dict1.update({'owner':row['owner'], 
+                   'repo':row['repo'],
+                   'category':row['category'],
+                   'type':row['type']})
      res = res.append(dict1, ignore_index=True)
-    except:
+    except Exception as e:
+        print(str(e))
         pass
  
 #%%
-res.to_csv(r'C:\Users\erdem\Documents\code\quantMinds2019\gitHubStats.csv')    
+res.to_csv(r'C:\Users\erdem\Documents\code\quantMinds2019\gitHubStats2.csv')    
      

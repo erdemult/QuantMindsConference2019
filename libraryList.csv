@@ -1,0 +1,26 @@
+category,ignore,owner,repo,type
+data manipulation,pandas,pandas-dev,pandas,python
+data manipulation,scrapy,scrapy,scrapy,python
+data manipulation,nltk,nltk,nltk,python
+data manipulation,dplyr,tidyverse,dplyr,R
+data manipulation,Lubridate,tidyverse,lubridate,R
+data manipulation,data.table,Rdatatable,data.table,R
+machinelearning,tensorflow,tensorflow,tensorflow,python
+machinelearning,scikitlearn,scikit-learn,scikit-learn,python
+machinelearning,pytorch,pytorch,pytorch,python
+machinelearning,keras,keras-team,keras,python
+machinelearning,caret,topepo,caret,R
+mathematics,scipy,scipy,scipy,python
+mathematics,numpy,numpy,numpy,python
+visualization,shiny,rstudio,shiny,R
+visualization,matplotlib,matplotlib,matplotlib,python
+visualization,bokeh,bokeh,bokeh,python
+visualization,plotly,plotly,plotly.py,python
+visualization,plotly,ropensci,plotly,R
+visualization,plotly,plotly,plotly.js,js
+visualization,seaborn,mwaskom,seaborn,python
+visualization,ggplot2,tidyverse,ggplot2,R
+visualization,Esquisse,dreamrs,Esquisse,R
+machinelearning,,h2oai,h2o-3,R
+machinelearning,,mlr-org,mlr,R
+data manipulation,,tidyverse,dplyr,R

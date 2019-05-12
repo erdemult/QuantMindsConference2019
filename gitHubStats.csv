@@ -1,0 +1,26 @@
+,category,commits,forks,owner,repo,stars,type,watchers
+0,data manipulation,2197,7705,pandas-dev,pandas,19486,python,1012
+1,data manipulation,422,7718,scrapy,scrapy,32771,python,1840
+2,data manipulation,413,2112,nltk,nltk,7730,python,487
+3,data manipulation,1344,1070,tidyverse,dplyr,2914,R,260
+4,data manipulation,39,148,tidyverse,lubridate,425,R,44
+5,data manipulation,433,751,Rdatatable,data.table,1878,R,183
+6,machinelearning,22109,74539,tensorflow,tensorflow,127365,python,8583
+7,machinelearning,1224,17113,scikit-learn,scikit-learn,35028,python,2247
+8,machinelearning,6658,6645,pytorch,pytorch,27951,python,1242
+9,machinelearning,586,15628,keras-team,keras,41061,python,2013
+10,machinelearning,104,504,topepo,caret,1056,R,107
+11,mathematics,1789,2786,scipy,scipy,5762,python,313
+12,mathematics,2210,3564,numpy,numpy,10540,python,443
+13,visualization,448,1484,rstudio,shiny,3388,R,336
+14,visualization,3623,4158,matplotlib,matplotlib,9234,python,535
+15,visualization,706,2536,bokeh,bokeh,9404,python,396
+16,visualization,365,1114,plotly,plotly.py,4948,python,235
+17,visualization,528,520,ropensci,plotly,1497,R,116
+18,visualization,3435,1175,plotly,plotly.js,10151,js,277
+19,visualization,269,976,mwaskom,seaborn,6043,python,234
+20,visualization,263,1425,tidyverse,ggplot2,3795,R,329
+21,visualization,92,64,dreamrs,Esquisse,632,R,47
+22,machinelearning,1761,1476,h2oai,h2o-3,4010,R,392
+0,machinelearning,276.0,341.0,mlr-org,mlr,1240.0,R,102.0
+1,data manipulation,1344.0,1070.0,tidyverse,dplyr,2914.0,R,260.0

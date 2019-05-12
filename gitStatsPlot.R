@@ -5,7 +5,7 @@ require(gridExtra)
 require(grid)
 # require(cowplot)
 
-# put the repo lables through geom_text to the left of the plots
+# put the repo lables through geom_text to the left of the plots, DONE
 # select proper colors, DONE
 # remove the white space between the grid plots, DONE
 # update the underlying datasets
@@ -99,11 +99,11 @@ createGlob <- function(df) {
     p1 <- createPlot(row, ycolumn = "commits", color = row$color,
                      xlab = row$repo, ylim= 25000+shift, leftmargin = 1)
     p2 <- createPlot(row, ycolumn = "forks", color = '',
-                     xlab = '', ylim= 80000+shift, leftmargin = -0.6)
+                     xlab = '', ylim= 80000+shift, leftmargin = -0.8)
     p3 <- createPlot(row, ycolumn = "stars", color = '',
-                     xlab = '', ylim= 130000+shift, leftmargin = -0.6)
+                     xlab = '', ylim= 130000+shift, leftmargin = -0.8)
     p4 <- createPlot(row, ycolumn = "watchers", color = '',
-                     xlab = '', ylim= 9000+shift, leftmargin = -0.6)
+                     xlab = '', ylim= 9000+shift, leftmargin = -0.8)
     gs <- addToList(gs, p1)
     gs <- addToList(gs, p2)
     gs <- addToList(gs, p3)
@@ -128,7 +128,11 @@ lay <- rowr::cbind.fill(layP, layR, fill=NA)
 # grid.arrange(grobs=gsP, layout_matrix = layP)
 grid.arrange(grobs=gs, layout_matrix = data.matrix(lay))
 
-# 
+g <- arrangeGrob(grobs=gs, layout_matrix = data.matrix(lay)) #generates g
+
+ggsave(filename ='C:/Users/erdem/Documents/code/quantMinds2019/gitHubStats4.png',
+       g, height=10, width=10)
+
 # library(gridExtra)
 # library(grid)
 # library(ggplot2)
