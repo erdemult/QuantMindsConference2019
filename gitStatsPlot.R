@@ -2,6 +2,8 @@
 require(ggplot2)
 require(data.table)
 require(gridExtra)
+require(grid)
+# require(cowplot)
 
 # put the repo lables through geom_text to the left of the plots
 # select proper colors, DONE
@@ -46,31 +48,41 @@ createPlot <- function(row, ycolumn, color, xlab, ylim, leftmargin) {
     )  
   }
     
-  p1 <- p1 + coord_flip(ylim = c(0, ylim)) +
-  labs(y='', x=xlab) + # needs replacement with geom_text
-  theme(axis.text.y = element_blank(), 
+  p1 <- p1 + coord_flip(ylim = c(0, ylim), clip= "off") +
+  labs(y='', x='', tag= xlab) + # needs replacement with geom_text
+  theme(line = element_blank(),
+    axis.text.y = element_blank(), 
         axis.ticks = element_blank(),
         axis.text.x = element_blank(),
-        axis.title.y=element_text(size=5),
         panel.border = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         plot.margin=unit(c(0, 0, -1, leftmargin), "cm"), # top, r, b, l
-        # can we create slightly better background
         panel.background = element_rect(fill = lighten(row$color),
                                         colour = "white",
-                                        size = 0.5, linetype = "solid"))   
+                                        size = 0.5, linetype = "solid"),
+        plot.tag = element_text(size = 10),
+        plot.tag.position = c(.01, .5)
+    )   
+  # p1 <- ggdraw(p1) + draw_label(xlab, x = 0.04, y = 0.5, size = 10)
+  # p1 <- p1 + geom_text(aes(label = 'sentimentview.com', x = 0.5, y = 0.5), hjust = 1, vjust = 0, color="#a0a0a0", size=3.5)
+  # p1 <- ggplot_gtable(ggplot_build(p1))
+  
+  # p1$layout$clip[p1$layout$name == "panel"] <- "off"
+  
+  # p1 <- grid.draw(p1)
+  
   return(p1)
 }
 # test of single plot
-createPlot(row, ycolumn = "commits", color = '',
-           xlab = row$repo, ylim= 25000, leftmargin = 1)
+createPlot(df[repo=="pandas"], ycolumn = "commits", color = '',
+           xlab = df[repo=="pandas"]$repo, ylim= 25000, leftmargin = 1)
 createPlot(df[repo=="tensorflow"], ycolumn = "commits", color = '',
-           xlab = row$repo, ylim= 100000, leftmargin = 1)
+           xlab = df[repo=="tensorflow"]$repo, ylim= 100000, leftmargin = 1)
 createPlot(df[repo=="scipy"], ycolumn = "commits", color = '',
-           xlab = df[repo=="scipy"]$repo, ylim= 100000, leftmargin = 1)
+           xlab = df[repo=="scipy"]$repo, ylim= 100000, leftmargin = 0.1)
 createPlot(df[repo=="matplotlib"], ycolumn = "commits", color = '',
-           xlab = df[repo=="matplotlib"]$repo, ylim= 100000, leftmargin = -1)
+           xlab = df[repo=="matplotlib"]$repo, ylim= 100000, leftmargin = 1)
 
 addToList <- function(gs, p){
   k <- length(gs)
@@ -87,11 +99,11 @@ createGlob <- function(df) {
     p1 <- createPlot(row, ycolumn = "commits", color = row$color,
                      xlab = row$repo, ylim= 25000+shift, leftmargin = 1)
     p2 <- createPlot(row, ycolumn = "forks", color = '',
-                     xlab = '', ylim= 80000+shift, leftmargin = -0.4)
+                     xlab = '', ylim= 80000+shift, leftmargin = -0.6)
     p3 <- createPlot(row, ycolumn = "stars", color = '',
-                     xlab = '', ylim= 130000+shift, leftmargin = -0.4)
+                     xlab = '', ylim= 130000+shift, leftmargin = -0.6)
     p4 <- createPlot(row, ycolumn = "watchers", color = '',
-                     xlab = '', ylim= 9000+shift, leftmargin = -0.4)
+                     xlab = '', ylim= 9000+shift, leftmargin = -0.6)
     gs <- addToList(gs, p1)
     gs <- addToList(gs, p2)
     gs <- addToList(gs, p3)
