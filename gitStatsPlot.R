@@ -3,7 +3,13 @@ require(ggplot2)
 require(data.table)
 require(gridExtra)
 
-lighten <- function(color, factor=1.4){
+# put the repo lables through geom_text to the left of the plots
+# select proper colors, DONE
+# remove the white space between the grid plots, DONE
+# update the underlying datasets
+
+
+lighten <- function(color, factor=1.5){
   col <- col2rgb(color)
   col <- col*factor
   col <- rgb(t(as.matrix(apply(col, 1, function(x) if (x > 255) 255 else x))), maxColorValue=255)
@@ -15,12 +21,10 @@ setDT(df)
 
 colorMap <- data.frame(category=c("data manipulation","machinelearning", 
                           "mathematics", "visualization"),
-               color = c("#FFCC99","#66FFFF", "#99FF66", "#FF9900"))
+               color = c("#eaa52e","#e05555", "#2c88ea", "#4da839"))
+# orange, red, blue
 df <- merge(df, colorMap)
 
-# put the repo lables through geom_text
-# select proper colors
-# remove the white space between the grid plots
 
 
 # creates Single plot
@@ -29,7 +33,6 @@ createPlot <- function(row, ycolumn, color, xlab, ylim, leftmargin) {
   p1 <- ggplot(row, aes_string(x = "repo", y = ycolumn, label = ycolumn)) +
       geom_bar(stat = "identity", fill=row$color) 
 
-    
   if (row[[ycolumn]] > ylim*0.5 ) {
     p1 <- p1 + geom_text(
       aes_string(x = "repo", y = ycolumn, label = ycolumn), color = "white", 
@@ -52,7 +55,7 @@ createPlot <- function(row, ycolumn, color, xlab, ylim, leftmargin) {
         panel.border = element_blank(),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        plot.margin=unit(c(0,0,-0.5,leftmargin), "cm"), #
+        plot.margin=unit(c(0, 0, -1, leftmargin), "cm"), # top, r, b, l
         # can we create slightly better background
         panel.background = element_rect(fill = lighten(row$color),
                                         colour = "white",
@@ -61,9 +64,13 @@ createPlot <- function(row, ycolumn, color, xlab, ylim, leftmargin) {
 }
 # test of single plot
 createPlot(row, ycolumn = "commits", color = '',
-           xlab = row$repo, ylim= 20000, leftmargin = 1)
+           xlab = row$repo, ylim= 25000, leftmargin = 1)
 createPlot(df[repo=="tensorflow"], ycolumn = "commits", color = '',
            xlab = row$repo, ylim= 100000, leftmargin = 1)
+createPlot(df[repo=="scipy"], ycolumn = "commits", color = '',
+           xlab = df[repo=="scipy"]$repo, ylim= 100000, leftmargin = 1)
+createPlot(df[repo=="matplotlib"], ycolumn = "commits", color = '',
+           xlab = df[repo=="matplotlib"]$repo, ylim= 100000, leftmargin = -1)
 
 addToList <- function(gs, p){
   k <- length(gs)
@@ -80,11 +87,11 @@ createGlob <- function(df) {
     p1 <- createPlot(row, ycolumn = "commits", color = row$color,
                      xlab = row$repo, ylim= 25000+shift, leftmargin = 1)
     p2 <- createPlot(row, ycolumn = "forks", color = '',
-                     xlab = '', ylim= 100000+shift, leftmargin = 0)
+                     xlab = '', ylim= 80000+shift, leftmargin = -0.4)
     p3 <- createPlot(row, ycolumn = "stars", color = '',
-                     xlab = '', ylim= 200000+shift, leftmargin = 0)
+                     xlab = '', ylim= 130000+shift, leftmargin = -0.4)
     p4 <- createPlot(row, ycolumn = "watchers", color = '',
-                     xlab = '', ylim= 10000+shift, leftmargin = 0)
+                     xlab = '', ylim= 9000+shift, leftmargin = -0.4)
     gs <- addToList(gs, p1)
     gs <- addToList(gs, p2)
     gs <- addToList(gs, p3)
