@@ -23,4 +23,3 @@ visualization,ggplot2,tidyverse,ggplot2,R
 visualization,Esquisse,dreamrs,Esquisse,R
 machinelearning,,h2oai,h2o-3,R
 machinelearning,,mlr-org,mlr,R
-data manipulation,,tidyverse,dplyr,R

@@ -8,10 +8,12 @@ require(grid)
 # put the repo lables through geom_text to the left of the plots, DONE
 # select proper colors, DONE
 # remove the white space between the grid plots, DONE
-# update the underlying datasets
+# update the underlying datasets DONE
+# shift R ones to another limitscale
+# lighten colors
 
 
-lighten <- function(color, factor=1.5){
+lighten <- function(color, factor=2.5){
   col <- col2rgb(color)
   col <- col*factor
   col <- rgb(t(as.matrix(apply(col, 1, function(x) if (x > 255) 255 else x))), maxColorValue=255)
@@ -62,7 +64,7 @@ createPlot <- function(row, ycolumn, color, xlab, ylim, leftmargin) {
                                         colour = "white",
                                         size = 0.5, linetype = "solid"),
         plot.tag = element_text(size = 10),
-        plot.tag.position = c(.01, .5)
+        plot.tag.position = c(.01, .75)
     )   
   # p1 <- ggdraw(p1) + draw_label(xlab, x = 0.04, y = 0.5, size = 10)
   # p1 <- p1 + geom_text(aes(label = 'sentimentview.com', x = 0.5, y = 0.5), hjust = 1, vjust = 0, color="#a0a0a0", size=3.5)
@@ -91,19 +93,19 @@ addToList <- function(gs, p){
 }
 
 # go through data and create a list of plots => glob
-createGlob <- function(df) {
+createGlob <- function(df, ylims=c(25000, 80000, 130000, 9000)) {
   shift <- 0
   gs <- list()
   for(id in 1:dim(df)[1]) {
     row <- df[id,]
     p1 <- createPlot(row, ycolumn = "commits", color = row$color,
-                     xlab = row$repo, ylim= 25000+shift, leftmargin = 1)
+                     xlab = row$repo, ylim= ylims[1]+shift, leftmargin = 1)
     p2 <- createPlot(row, ycolumn = "forks", color = '',
-                     xlab = '', ylim= 80000+shift, leftmargin = -0.8)
+                     xlab = '', ylim= ylims[2]+shift, leftmargin = -0.8)
     p3 <- createPlot(row, ycolumn = "stars", color = '',
-                     xlab = '', ylim= 130000+shift, leftmargin = -0.8)
+                     xlab = '', ylim= ylims[3]+shift, leftmargin = -0.8)
     p4 <- createPlot(row, ycolumn = "watchers", color = '',
-                     xlab = '', ylim= 9000+shift, leftmargin = -0.8)
+                     xlab = '', ylim= ylims[4]+shift, leftmargin = -0.8)
     gs <- addToList(gs, p1)
     gs <- addToList(gs, p2)
     gs <- addToList(gs, p3)
@@ -116,7 +118,8 @@ createGlob <- function(df) {
 gsP <- createGlob(df[type=="python"][order(category,-commits)])  
 layP <- matrix(1:length(gsP), ncol = 4, byrow=TRUE)
 
-gsR <- createGlob(df[type=="R"][order(category,-commits)])  
+gsR <- createGlob(df[type=="R"][order(category,-commits)],
+                  ylims = c(1500,1500,4500,400))  
 layR <- matrix(seq(length(gsP)+1, length.out=length(gsR)), ncol = 4, byrow=TRUE)
 
 gs <- c(gsP, gsR)
@@ -131,7 +134,7 @@ grid.arrange(grobs=gs, layout_matrix = data.matrix(lay))
 g <- arrangeGrob(grobs=gs, layout_matrix = data.matrix(lay)) #generates g
 
 ggsave(filename ='C:/Users/erdem/Documents/code/quantMinds2019/gitHubStats4.png',
-       g, height=10, width=10)
+       g, height=4, width=11)
 
 # library(gridExtra)
 # library(grid)
